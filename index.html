@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="M. Selçuk — insanların teknolojiye hızlı ve en az maliyetle ulaşmasını sağlayan projeler.">
+<title>M. Selçuk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}
+img{max-width:100%}
+
+/* Layout: mağaza düzeni — iki tonlu büyük başlık, kategori satırı, yatay kaydırılan kart rafları. Tek karanlık tema. */
+:root{
+  --bg:#000;
+  --card:#1c1c1e;
+  --card-2:#2a2a2d;
+  --text:#f5f5f7;
+  --gray:#86868b;
+  --link:#2997ff;
+  --line:#2c2c2e;
+  --f:-apple-system,BlinkMacSystemFont,"SF Pro Display","Geist","Helvetica Neue",Arial,sans-serif;
+  --wrap:1180px;
+  --ease:cubic-bezier(.25,.1,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--f);font-size:17px;line-height:1.47;letter-spacing:-.022em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:rgba(22,22,23,.8)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:6px}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:var(--wrap);margin:0 auto}
+
+/* Global bar */
+.gbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(22,22,23,.8);backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px)}
+.gbar .wrap{height:44px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:12px}
+.gbar .mark{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.gbar nav{display:flex;gap:28px;color:#d2d2d7}
+.gbar nav a{opacity:.85;transition:opacity .2s}
+.gbar nav a:hover{opacity:1}
+
+/* Headline */
+.head{padding-block:64px 0}
+.head h1{margin:0;font-size:clamp(36px,5.4vw,56px);line-height:1.07;font-weight:600;letter-spacing:-.028em;max-width:22ch;text-wrap:balance}
+.head h1 .g{color:var(--gray)}
+.rot{display:inline-grid}
+.rot > span{grid-area:1/1;transition:opacity .6s var(--ease),transform .6s var(--ease),filter .6s var(--ease)}
+.rot > span.out{opacity:0;transform:translateY(.25em);filter:blur(6px)}
+.side{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.side .who{font-size:14px;color:var(--gray);line-height:1.5}
+.side .who a{color:var(--link)}
+.side .who a:hover{text-decoration:underline}
+
+/* Category row */
+.cats{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none;padding-block:44px 8px;margin-top:8px}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:10px;background:none;border:0;cursor:pointer;padding:0;min-width:84px}
+.cat .ic{width:72px;height:56px;display:grid;place-items:center;border-radius:14px;transition:background .25s}
+.cat svg{width:40px;height:40px;fill:none;stroke:var(--text);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.cat span{font-size:13px;font-weight:500;color:var(--text)}
+.cat:hover .ic{background:var(--card)}
+.cat[aria-pressed="true"] .ic{background:var(--card-2)}
+.cat[aria-pressed="true"] span{color:var(--link)}
+
+/* Shelf */
+.shelf{padding-block:56px 0}
+.shelf h2{margin:0 0 4px;font-size:clamp(24px,3vw,28px);font-weight:600;letter-spacing:-.02em;line-height:1.14}
+.shelf h2 .g{color:var(--gray)}
+.track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:max(16px,calc((100vw - var(--wrap))/2));
+  padding:28px max(16px,calc((100vw - var(--wrap))/2)) 44px;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.track > *{scroll-snap-align:start;flex:0 0 auto}
+.paddles{display:flex;justify-content:flex-end;gap:14px;margin-top:-28px}
+.paddle{width:36px;height:36px;border-radius:50%;border:0;background:rgba(210,210,215,.16);display:grid;place-items:center;cursor:pointer;transition:background .2s,opacity .2s}
+.paddle:hover{background:rgba(210,210,215,.26)}
+.paddle:disabled{opacity:.3;cursor:default}
+.paddle svg{width:14px;height:14px;fill:none;stroke:var(--text);stroke-width:2}
+
+/* Product card */
+.pcard{width:min(400px,84vw);height:500px;border-radius:18px;background:var(--card);position:relative;overflow:hidden;display:flex;flex-direction:column;padding:28px 30px;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.pcard:hover{transform:scale(1.015);box-shadow:0 10px 36px rgba(0,0,0,.6)}
+.pcard .eb{font-size:12px;font-weight:600;letter-spacing:.01em;text-transform:uppercase;color:var(--gray)}
+.pcard h3{margin:6px 0 0;font-size:28px;line-height:1.14;font-weight:600;letter-spacing:-.02em}
+.pcard p{margin:8px 0 0;font-size:16px;color:#d2d2d7;max-width:30ch}
+.pcard .cta{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:14px;position:relative;z-index:2}
+.pcard .cta .l{color:var(--link)}
+.pcard .cta .r{color:var(--gray);font-size:12px}
+.pcard .plus{position:absolute;right:22px;bottom:22px;width:36px;height:36px;border-radius:50%;background:var(--text);color:#000;display:grid;place-items:center;z-index:3;transition:transform .35s var(--ease)}
+.pcard:hover .plus{transform:rotate(-45deg)}
+.pcard .plus svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2}
+.pcard .cta{padding-right:48px}
+.pcard[hidden]{display:none!important}
+
+/* Device art */
+.art{position:absolute;left:50%;bottom:-36px;transform:translateX(-50%);transition:transform .7s var(--ease)}
+.pcard:hover .art{transform:translateX(-50%) translateY(-10px)}
+.phone{width:168px;height:300px;border-radius:30px;background:#0b0b0c;border:5px solid #3a3a3c;padding:14px 12px;display:flex;flex-direction:column;gap:9px;box-shadow:0 30px 60px -20px var(--tint)}
+.phone .notch{width:46px;height:12px;border-radius:8px;background:#2a2a2d;margin:0 auto 6px}
+.browser{width:300px;height:220px;border-radius:12px;background:#0b0b0c;border:1px solid #3a3a3c;overflow:hidden;box-shadow:0 30px 60px -20px var(--tint)}
+.browser .bar{height:22px;background:#1f1f21;display:flex;align-items:center;gap:5px;padding:0 9px}
+.browser .bar i{width:7px;height:7px;border-radius:50%;background:#48484a}
+.browser .body{padding:14px;display:flex;flex-direction:column;gap:9px}
+.ln{height:8px;border-radius:4px;background:#2c2c2e}
+.ln.t{height:14px;width:62%;background:var(--tint)}
+.ln.s{width:40%}
+.ln.m{width:76%}
+.blk{border-radius:8px;background:#1c1c1e;height:46px;display:flex;align-items:center;gap:8px;padding:0 10px}
+.blk b{width:24px;height:24px;border-radius:7px;background:var(--tint);opacity:.85;flex:0 0 auto}
+.blk .ln{flex:1}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ring{width:84px;height:84px;border-radius:50%;margin:8px auto;background:conic-gradient(var(--tint) 0 68%,#2c2c2e 68% 100%);display:grid;place-items:center}
+.ring::after{content:"45";width:64px;height:64px;border-radius:50%;background:#0b0b0c;display:grid;place-items:center;font-weight:600;font-size:20px;color:var(--text);font-variant-numeric:tabular-nums}
+.scan{height:120px;border-radius:8px;border:1.5px dashed var(--tint);position:relative;overflow:hidden}
+.scan::after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--tint);box-shadow:0 0 12px var(--tint);animation:scan 2.6s var(--ease) infinite alternate}
+@keyframes scan{from{top:8%}to{top:88%}}
+.play{width:46px;height:46px;border-radius:50%;background:var(--tint);margin:16px auto 4px;display:grid;place-items:center}
+.play::after{content:"";border-left:13px solid #0b0b0c;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+
+/* Who cards */
+.qcard{width:min(320px,78vw);min-height:220px;border-radius:18px;background:var(--card);padding:28px 26px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.qcard .n{font-size:12px;font-weight:600;text-transform:uppercase;color:var(--gray)}
+.qcard p{margin:0;font-size:21px;line-height:1.24;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+.qcard p .g{color:var(--gray)}
+
+/* Social cards */
+.scard{width:min(250px,64vw);height:180px;border-radius:18px;background:var(--card);padding:24px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .45s var(--ease),background .3s}
+.scard:hover{transform:scale(1.02);background:#222224}
+.scard svg{width:30px;height:30px;fill:none;stroke:var(--text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.scard strong{display:block;font-size:19px;font-weight:600}
+.scard span{font-size:13px;color:var(--gray)}
+.scard.soon{opacity:.6}
+
+footer{margin-top:40px;background:#111112;color:var(--gray);font-size:12px}
+footer .wrap{padding-block:20px 28px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:1px solid var(--line)}
+
+
+/* Yakında sheet */
+.sheet{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(0,0,0,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.sheet[hidden]{display:none}
+.sheet.on{opacity:1;pointer-events:auto}
+.sheet .box{width:min(420px,100%);background:var(--card);border-radius:22px;padding:40px 32px 32px;text-align:center;transform:scale(.94) translateY(12px);transition:transform .45s cubic-bezier(.2,.8,.2,1);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.sheet.on .box{transform:none}
+.sheet .dot{width:56px;height:56px;border-radius:16px;margin:0 auto 22px;background:var(--tint,#2997ff);opacity:.9;display:grid;place-items:center}
+.sheet .dot svg{width:26px;height:26px;fill:none;stroke:#000;stroke-width:2;stroke-linecap:round}
+.sheet .eb2{font-size:12px;font-weight:600;text-transform:uppercase;color:var(--gray)}
+.sheet h3{margin:6px 0 10px;font-size:28px;font-weight:600;letter-spacing:-.02em}
+.sheet p{margin:0 auto 28px;color:#d2d2d7;max-width:28ch}
+.sheet button{border:0;cursor:pointer;background:var(--link);color:#fff;font-size:15px;font-weight:500;padding:11px 26px;border-radius:999px;transition:filter .2s}
+.sheet button:hover{filter:brightness(1.12)}
+
+@media (max-width:600px){
+  .gbar nav{gap:18px}
+  .head{padding-block:40px 0}
+  .pcard{height:460px}
+  .paddles{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="gbar gut">
+  <div class="wrap">
+    <a class="mark" href="#top">M. Selçuk</a>
+    <nav>
+      <a href="#projeler">Projeler</a>
+      <a href="#kimdir">Kimdir</a>
+      <a href="#baglanti">Bağlantılar</a>
+    </nav>
+  </div>
+</div>
+
+<main id="top">
+  <header class="head gut">
+    <div class="wrap side">
+      <h1>M. Selçuk. <span class="g rot" id="rot" aria-live="polite">
+        <span>Teknolojiyi herkes için hızlı ve ulaşılabilir kılar.</span>
+        <span class="out">İhtiyacı alır, sade bir ürüne dönüştürür.</span>
+        <span class="out">Az maliyetle, çok işe yarayan yazılımlar üretir.</span>
+        <span class="out">Fikirden yayına, tek elden.</span>
+      </span></h1>
+      <div class="who">selcukyus<br><a href="https://github.com/sinekvalesii" target="_blank" rel="noopener">GitHub'da takip et ›</a></div>
+    </div>
+  </header>
+
+  <div class="gut">
+    <div class="wrap cats" role="toolbar" aria-label="Proje kategorileri">
+      <button class="cat" data-f="all" aria-pressed="true"><span class="ic"><svg viewBox="0 0 40 40"><rect x="6" y="6" width="11" height="11" rx="3"/><rect x="23" y="6" width="11" height="11" rx="3"/><rect x="6" y="23" width="11" height="11" rx="3"/><rect x="23" y="23" width="11" height="11" rx="3"/></svg></span><span>Tümü</span></button>
+      <button class="cat" data-f="web" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><rect x="4" y="8" width="32" height="22" rx="3"/><path d="M14 34h12M20 30v4"/></svg></span><span>Web</span></button>
+      <button class="cat" data-f="android" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><rect x="12" y="4" width="16" height="32" rx="4"/><path d="M18 31h4"/></svg></span><span>Android</span></button>
+      <button class="cat" data-f="egitim" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><path d="M4 15 20 8l16 7-16 7z"/><path d="M11 18v8c3 3 15 3 18 0v-8"/></svg></span><span>Eğitim</span></button>
+      <button class="cat" data-f="arac" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13"/><path d="M20 13v10M15 19l5 5 5-5"/></svg></span><span>Araçlar</span></button>
+    </div>
+  </div>
+
+  <section class="shelf" id="projeler">
+    <div class="gut"><div class="wrap">
+      <h2>Projeler. <span class="g">Son geliştirdiklerim.</span></h2>
+      <div class="paddles"><button class="paddle" data-dir="-1" aria-label="Geri"><svg viewBox="0 0 14 14"><path d="M9 2 4 7l5 5"/></svg></button><button class="paddle" data-dir="1" aria-label="İleri"><svg viewBox="0 0 14 14"><path d="m5 2 5 5-5 5"/></svg></button></div>
+    </div></div>
+    <div class="track" id="ptrack">
+
+      <a class="pcard" data-c="web" href="#" data-link="" style="--tint:#ff9f0a">
+        <span class="eb">Web platformu</span><h3>Servis Team</h3><p>Servis firmaları, şoförler ve müşteriler tek yerde.</p>
+        <div class="art"><div class="browser"><div class="bar"><i></i><i></i><i></i></div><div class="body"><div class="ln t"></div><div class="blk"><b></b><div class="ln m"></div></div><div class="blk"><b></b><div class="ln s"></div></div><div class="blk"><b></b><div class="ln m"></div></div></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+      <a class="pcard" data-c="android" href="#" data-link="" style="--tint:#30d158">
+        <span class="eb">Mobil uygulama</span><h3>AZİM</h3><p>66 günde kalıcı alışkanlık. Her gün tek adım.</p>
+        <div class="art"><div class="phone"><div class="notch"></div><div class="ln s"></div><div class="ring"></div><div class="blk"><b></b><div class="ln m"></div></div><div class="blk"><b></b><div class="ln s"></div></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+      <a class="pcard" data-c="egitim web" href="#" data-link="" style="--tint:#64d2ff">
+        <span class="eb">Eğitim</span><h3>Sınav Platformu</h3><p>KPSS, YKS, DGS ve fazlası. Ücretsiz, sana göre.</p>
+        <div class="art"><div class="browser"><div class="bar"><i></i><i></i><i></i></div><div class="body"><div class="ln t"></div><div class="row2"><div class="blk"><b></b></div><div class="blk"><b></b></div></div><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+      <a class="pcard" data-c="android arac" href="#" data-link="" style="--tint:#bf5af2">
+        <span class="eb">Android</span><h3>NovaScan</h3><p>Belgeni tara, metne çevir, güvenle sakla.</p>
+        <div class="art"><div class="phone"><div class="notch"></div><div class="ln s"></div><div class="scan"></div><div class="ln m"></div><div class="ln s"></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+      <a class="pcard" data-c="web arac" href="#" data-link="" style="--tint:#ff375f">
+        <span class="eb">Web aracı</span><h3>Klipal</h3><p>Videoyu filigransız, istediğin kalitede indir.</p>
+        <div class="art"><div class="browser"><div class="bar"><i></i><i></i><i></i></div><div class="body"><div class="ln t" style="margin:0 auto"></div><div class="play"></div><div class="blk"><div class="ln m"></div><b></b></div></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+      <a class="pcard" data-c="android" href="#" data-link="" style="--tint:#ffd60a">
+        <span class="eb">İşletme</span><h3>S-Check</h3><p>Küçük işletmeler için stok ve satış, cebinde.</p>
+        <div class="art"><div class="phone"><div class="notch"></div><div class="ln t"></div><div class="row2"><div class="blk"><b></b></div><div class="blk"><b></b></div></div><div class="blk"><div class="ln m"></div></div><div class="blk"><div class="ln s"></div></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="shelf" id="kimdir">
+    <div class="gut"><div class="wrap"><h2>Kimdir. <span class="g">Kısaca.</span></h2></div></div>
+    <div class="track">
+      <div class="qcard"><span class="n">Amaç</span><p>İnsanların teknolojiye <span class="g">hızlı ve en az maliyetle</span> ulaşmasını sağlar.</p></div>
+      <div class="qcard"><span class="n">Yaklaşım</span><p>Karmaşık olanı sadeleştirir. <span class="g">Herkesin kullanabileceği hale getirir.</span></p></div>
+      <div class="qcard"><span class="n">Odak</span><p>Gündelik bir sorunu <span class="g">işe yarayan bir ürüne</span> dönüştürür.</p></div>
+      <div class="qcard"><span class="n">İlke</span><p>Önce kullanıcı. <span class="g">Sonra teknoloji.</span></p></div>
+    </div>
+  </section>
+
+  <section class="shelf" id="baglanti">
+    <div class="gut"><div class="wrap"><h2>Bağlantılar. <span class="g">Takip et, ulaş.</span></h2></div></div>
+    <div class="track">
+      <a class="scard" href="https://github.com/sinekvalesii" target="_blank" rel="noopener"><svg viewBox="0 0 30 30"><path d="M10 8 4 15l6 7M20 8l6 7-6 7M17 6l-4 18"/></svg><div><strong>GitHub</strong><span>@sinekvalesii</span></div></a>
+      <a class="scard soon" href="#baglanti"><svg viewBox="0 0 30 30"><rect x="4" y="4" width="22" height="22" rx="6"/><circle cx="15" cy="15" r="5"/><circle cx="21.5" cy="8.5" r=".6"/></svg><div><strong>Instagram</strong><span>Yakında</span></div></a>
+      <a class="scard soon" href="#baglanti"><svg viewBox="0 0 30 30"><rect x="3" y="7" width="24" height="16" rx="5"/><path d="m13 11 6 4-6 4z"/></svg><div><strong>YouTube</strong><span>Yakında</span></div></a>
+      <a class="scard soon" href="#baglanti"><svg viewBox="0 0 30 30"><rect x="4" y="4" width="22" height="22" rx="4"/><path d="M10 13v8M10 9v.5M14 21v-8M14 16c0-2 1.5-3 3-3s3 1 3 3v5"/></svg><div><strong>LinkedIn</strong><span>Yakında</span></div></a>
+    </div>
+  </section>
+</main>
+
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" hidden>
+  <div class="box">
+    <div class="dot"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="9"/><path d="M13 8v5l3 2"/></svg></div>
+    <div class="eb2" id="sh-e">Proje</div>
+    <h3 id="sh-t">Yakında</h3>
+    <p>Bu proje üzerinde çalışılıyor. Hazır olduğunda buradan erişebileceksin.</p>
+    <button type="button" id="sh-x">Tamam</button>
+  </div>
+</div>
+
+<footer class="gut"><div class="wrap"><span>© 2026 selcukyus</span><span>İstanbul, Türkiye</span></div></footer>
+
+<script>
+(function(){
+  /* Dönen başlık */
+  var spans=[].slice.call(document.querySelectorAll('#rot > span')),i=0;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    setInterval(function(){
+      spans[i].classList.add('out');
+      i=(i+1)%spans.length;
+      spans[i].classList.remove('out');
+    },3600);
+  }
+
+  /* Kategori filtresi */
+  var cats=[].slice.call(document.querySelectorAll('.cat'));
+  var cards=[].slice.call(document.querySelectorAll('#ptrack .pcard'));
+  var track=document.getElementById('ptrack');
+  cats.forEach(function(b){
+    b.addEventListener('click',function(){
+      cats.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+      var f=b.dataset.f;
+      cards.forEach(function(c){c.hidden=!(f==='all'||c.dataset.c.split(' ').indexOf(f)>-1)});
+      track.scrollTo({left:0,behavior:'smooth'});
+      document.getElementById('projeler').scrollIntoView({behavior:'smooth',block:'start'});
+      setTimeout(upd,400);
+    });
+  });
+
+
+  /* Proje bağlantıları: link varsa açılır, yoksa Yakında */
+  var sheet=document.getElementById('sheet'),last=null;
+  function openSheet(c){
+    last=c;
+    document.getElementById('sh-e').textContent=c.querySelector('h3').textContent;
+    sheet.style.setProperty('--tint',getComputedStyle(c).getPropertyValue('--tint'));
+    sheet.hidden=false;
+    requestAnimationFrame(function(){sheet.classList.add('on')});
+    document.getElementById('sh-x').focus();
+  }
+  function closeSheet(){
+    sheet.classList.remove('on');
+    setTimeout(function(){sheet.hidden=true},350);
+    if(last)last.focus();
+  }
+  cards.forEach(function(c){
+    var l=c.getAttribute('data-link');
+    if(l){c.href=l;c.target='_blank';c.rel='noopener';}
+    else c.addEventListener('click',function(e){e.preventDefault();openSheet(c)});
+  });
+  document.getElementById('sh-x').addEventListener('click',closeSheet);
+  sheet.addEventListener('click',function(e){if(e.target===sheet)closeSheet()});
+  addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)closeSheet()});
+
+  /* Raf okları */
+  var pads=[].slice.call(document.querySelectorAll('.paddle'));
+  function upd(){
+    pads[0].disabled=track.scrollLeft<=4;
+    pads[1].disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-4;
+  }
+  pads.forEach(function(p){
+    p.addEventListener('click',function(){track.scrollBy({left:p.dataset.dir*(track.clientWidth*.8),behavior:'smooth'})});
+  });
+  track.addEventListener('scroll',upd,{passive:true});
+  addEventListener('resize',upd);
+  upd();
+})();
+</script>
+
+</body>
+</html>
