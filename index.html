@@ -201,6 +201,8 @@ footer .wrap{padding-block:20px 28px;display:flex;justify-content:space-between;
   <div class="gut">
     <div class="wrap cats" role="toolbar" aria-label="Proje kategorileri">
       <button class="cat" data-f="all" aria-pressed="true"><span class="ic"><svg viewBox="0 0 40 40"><rect x="6" y="6" width="11" height="11" rx="3"/><rect x="23" y="6" width="11" height="11" rx="3"/><rect x="6" y="23" width="11" height="11" rx="3"/><rect x="23" y="23" width="11" height="11" rx="3"/></svg></span><span>Tümü</span></button>
+      <button class="cat" data-f="yayinda" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13"/><path d="m14 20 4 4 8-8"/></svg></span><span>Yayında</span></button>
+      <button class="cat" data-f="yakinda" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13"/><path d="M20 13v7l5 3"/></svg></span><span>Yakında</span></button>
       <button class="cat" data-f="web" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><rect x="4" y="8" width="32" height="22" rx="3"/><path d="M14 34h12M20 30v4"/></svg></span><span>Web</span></button>
       <button class="cat" data-f="android" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><rect x="12" y="4" width="16" height="32" rx="4"/><path d="M18 31h4"/></svg></span><span>Android</span></button>
       <button class="cat" data-f="egitim" aria-pressed="false"><span class="ic"><svg viewBox="0 0 40 40"><path d="M4 15 20 8l16 7-16 7z"/><path d="M11 18v8c3 3 15 3 18 0v-8"/></svg></span><span>Eğitim</span></button>
@@ -339,6 +341,7 @@ footer .wrap{padding-block:20px 28px;display:flex;justify-content:space-between;
   }
   cards.forEach(function(c){
     var l=c.getAttribute('data-link');
+    c.dataset.c+=l?' yayinda':' yakinda';
     if(l){c.href=l;c.target='_blank';c.rel='noopener';}
     else{var t=document.createElement('span');t.className='soon-pill';t.textContent='Yakında';c.appendChild(t);c.addEventListener('click',function(e){e.preventDefault();openSheet(c)});}
   });
