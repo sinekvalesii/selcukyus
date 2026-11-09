@@ -120,6 +120,12 @@ button{font:inherit;color:inherit}
 .scan{height:120px;border-radius:8px;border:1.5px dashed var(--tint);position:relative;overflow:hidden}
 .scan::after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--tint);box-shadow:0 0 12px var(--tint);animation:scan 2.6s var(--ease) infinite alternate}
 @keyframes scan{from{top:8%}to{top:88%}}
+.map{height:120px;border-radius:8px;position:relative;overflow:hidden;background:#1c1c1e;
+  background-image:linear-gradient(#2c2c2e 1px,transparent 1px),linear-gradient(90deg,#2c2c2e 1px,transparent 1px);background-size:22px 22px}
+.map .pin{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-18px 0 0 -9px;border-radius:50% 50% 50% 0;background:var(--tint);transform:rotate(-45deg);animation:bob 2.2s var(--ease) infinite}
+.map::after{content:"";position:absolute;left:50%;top:50%;width:36px;height:36px;margin:-14px 0 0 -18px;border-radius:50%;border:1.5px solid var(--tint);opacity:.5;animation:pulse 2.2s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:rotate(-45deg) translate(0,0)}50%{transform:rotate(-45deg) translate(3px,-3px)}}
+@keyframes pulse{from{transform:scale(.4);opacity:.7}to{transform:scale(1.4);opacity:0}}
 .play{width:46px;height:46px;border-radius:50%;background:var(--tint);margin:16px auto 4px;display:grid;place-items:center}
 .play::after{content:"";border-left:13px solid #0b0b0c;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
 
@@ -224,6 +230,12 @@ footer .wrap{padding-block:20px 28px;display:flex;justify-content:space-between;
       <a class="pcard" data-c="egitim web" href="#" data-link="https://sinekvalesii.github.io/sinalish/" style="--tint:#64d2ff">
         <span class="eb">Eğitim</span><h3>Sınav Platformu</h3><p>KPSS, YKS, DGS ve fazlası. Ücretsiz, sana göre.</p>
         <div class="art"><div class="browser"><div class="bar"><i></i><i></i><i></i></div><div class="body"><div class="ln t"></div><div class="row2"><div class="blk"><b></b></div><div class="blk"><b></b></div></div><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div>
+        <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
+      </a>
+
+      <a class="pcard" data-c="web arac" href="#" data-link="https://sinekvalesii.github.io/tuvaletimgeldi/" style="--tint:#5e5ce6">
+        <span class="eb">Konum · Web</span><h3>Tuvaletim Geldi</h3><p>En yakın tuvaleti bul, puanla, yolunu kısalt.</p>
+        <div class="art"><div class="phone"><div class="notch"></div><div class="map"><span class="pin"></span></div><div class="blk"><b></b><div class="ln m"></div></div><div class="blk"><b></b><div class="ln s"></div></div></div></div>
         <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
       </a>
 
