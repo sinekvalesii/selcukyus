@@ -96,6 +96,7 @@ button{font:inherit;color:inherit}
 .pcard .plus svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2}
 .pcard .cta{padding-right:48px}
 .pcard[hidden]{display:none!important}
+.pcard .soon-pill{position:absolute;top:26px;right:26px;font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--text);background:rgba(255,255,255,.1);padding:4px 10px;border-radius:999px}
 
 /* Device art */
 .art{position:absolute;left:50%;bottom:-36px;transform:translateX(-50%);transition:transform .7s var(--ease)}
@@ -214,13 +215,13 @@ footer .wrap{padding-block:20px 28px;display:flex;justify-content:space-between;
         <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
       </a>
 
-      <a class="pcard" data-c="android" href="#" data-link="" style="--tint:#30d158">
+      <a class="pcard" data-c="android" href="#" data-link="https://sinekvalesii.github.io/AzimApp/" style="--tint:#30d158">
         <span class="eb">Mobil uygulama</span><h3>AZİM</h3><p>66 günde kalıcı alışkanlık. Her gün tek adım.</p>
         <div class="art"><div class="phone"><div class="notch"></div><div class="ln s"></div><div class="ring"></div><div class="blk"><b></b><div class="ln m"></div></div><div class="blk"><b></b><div class="ln s"></div></div></div></div>
         <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
       </a>
 
-      <a class="pcard" data-c="egitim web" href="#" data-link="" style="--tint:#64d2ff">
+      <a class="pcard" data-c="egitim web" href="#" data-link="https://sinekvalesii.github.io/sinalish/" style="--tint:#64d2ff">
         <span class="eb">Eğitim</span><h3>Sınav Platformu</h3><p>KPSS, YKS, DGS ve fazlası. Ücretsiz, sana göre.</p>
         <div class="art"><div class="browser"><div class="bar"><i></i><i></i><i></i></div><div class="body"><div class="ln t"></div><div class="row2"><div class="blk"><b></b></div><div class="blk"><b></b></div></div><div class="ln m"></div><div class="ln s"></div><div class="ln m"></div></div></div></div>
         <span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6"/></svg></span>
@@ -327,7 +328,7 @@ footer .wrap{padding-block:20px 28px;display:flex;justify-content:space-between;
   cards.forEach(function(c){
     var l=c.getAttribute('data-link');
     if(l){c.href=l;c.target='_blank';c.rel='noopener';}
-    else c.addEventListener('click',function(e){e.preventDefault();openSheet(c)});
+    else{var t=document.createElement('span');t.className='soon-pill';t.textContent='Yakında';c.appendChild(t);c.addEventListener('click',function(e){e.preventDefault();openSheet(c)});}
   });
   document.getElementById('sh-x').addEventListener('click',closeSheet);
   sheet.addEventListener('click',function(e){if(e.target===sheet)closeSheet()});
